@@ -36,3 +36,21 @@ Route::group([
     Route::delete('/{id}', [AuthController::class, 'destroy']);
 });
 
+Route::get('/products', [ProductController::class, 'products']);
+
+Route::get('/products/{slug}', [ProductController::class, 'productById']);
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'orders'
+], function () {
+    Route::post('/', [OrderController::class, 'store']);
+    Route::get('/myorders', [OrderController::class, 'myOrders']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+    Route::put('/{id}/pay', [OrderController::class, 'updatePayment']);
+    Route::put('/{id}/deliver', [OrderController::class, 'updateDeliver']);
+});
+
+Route::middleware('auth:api')->get('/config/paypal', function () {
+    return response()->json(env('PAYPAL_CLIENT_ID', 0), 200);
+});
