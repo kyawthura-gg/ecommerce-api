@@ -13,7 +13,7 @@ class CreateProductReivewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_reivews', function (Blueprint $table) {
+        Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('product_id');
@@ -31,6 +31,6 @@ class CreateProductReivewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_reivews');
+        Schema::dropIfExists('product_reviews');
     }
 }
