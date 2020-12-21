@@ -87,13 +87,13 @@ class OrderController extends Controller
             ->where('order_id', $id)
             ->get();
         $user = auth()->user();
-        if ($user->id != $order->user_id) {
-            return response()->json(["message" => 'Order Not Found'], 404);
+        if ($user->is_admin || $user->id == $order->user_id) {
+            $order->user = $user;
+            return response()->json($order, 200);
         }
-        $order->user = $user;
-        return response()->json($order, 200);
-    }
 
+        return response()->json(["message" => 'Order Not Found'], 404);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -166,5 +166,17 @@ class OrderController extends Controller
             return response()->json($order, 200);
         }
         return response()->json(['message' => 'Something went wrong'], 400);
+    }
+    /**
+     * Get all order lists
+     * 
+     * @return json
+     */
+
+    public function orders()
+    {
+        $order = Order::with('user')->get();
+
+        return response()->json($order, 200);
     }
 }
