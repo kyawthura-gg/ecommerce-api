@@ -39,15 +39,25 @@ Route::group([
     Route::put('/{id}', [AuthController::class, 'updateUser']);
 });
 
-Route::get('/products', [ProductController::class, 'products']);
+Route::group([
+    'prefix' => 'products'
+], function () {
+    Route::get('/', [ProductController::class, 'products']);
+    Route::post('/', [ProductController::class, 'store'])->middleware('api');
+    Route::get('/{slug}', [ProductController::class, 'productById']);
+    Route::delete('/{id}', [ProductController::class, 'destroy'])->middleware('api');
+    Route::put('/{id}', [ProductController::class, 'update'])->middleware('api');
+    Route::post('/{id}/reviews', [ProductController::class, 'addProductReview'])->middleware('api');
 
-Route::get('/products/{slug}', [ProductController::class, 'productById']);
+    Route::post('/uploads', [ProductController::class, 'uploadImage'])->middleware('api');
+});
 
 Route::group([
     'middleware' => 'api',
     'prefix' => 'orders'
 ], function () {
     Route::post('/', [OrderController::class, 'store']);
+    Route::get('/', [OrderController::class, 'orders']);
     Route::get('/myorders', [OrderController::class, 'myOrders']);
     Route::get('/{id}', [OrderController::class, 'show']);
     Route::put('/{id}/pay', [OrderController::class, 'updatePayment']);
