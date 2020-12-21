@@ -57,6 +57,7 @@ Route::group([
     'prefix' => 'orders'
 ], function () {
     Route::post('/', [OrderController::class, 'store']);
+    Route::get('/', [OrderController::class, 'orders']);
     Route::get('/myorders', [OrderController::class, 'myOrders']);
     Route::get('/{id}', [OrderController::class, 'show']);
     Route::put('/{id}/pay', [OrderController::class, 'updatePayment']);
