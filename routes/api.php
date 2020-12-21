@@ -29,11 +29,14 @@ Route::group([
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/', [AuthController::class, 'register']);
     Route::get('/', [AuthController::class, 'userList']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/{id}', [AuthController::class, 'userProfile']);
     Route::put('/profile', [AuthController::class, 'updateUserProfile']);
+
+    Route::get('/{id}', [AuthController::class, 'userProfile']);
     Route::delete('/{id}', [AuthController::class, 'destroy']);
+    Route::put('/{id}', [AuthController::class, 'updateUser']);
 });
 
 Route::get('/products', [ProductController::class, 'products']);
