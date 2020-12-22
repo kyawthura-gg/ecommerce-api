@@ -42,11 +42,14 @@ Route::group([
 Route::group([
     'prefix' => 'products'
 ], function () {
+    Route::get('/top', [ProductController::class, 'topProducts']);
     Route::get('/', [ProductController::class, 'products']);
     Route::post('/', [ProductController::class, 'store'])->middleware('api');
+
     Route::get('/{slug}', [ProductController::class, 'productById']);
     Route::delete('/{id}', [ProductController::class, 'destroy'])->middleware('api');
     Route::put('/{id}', [ProductController::class, 'update'])->middleware('api');
+
     Route::post('/{id}/reviews', [ProductController::class, 'addProductReview'])->middleware('api');
 
     Route::post('/uploads', [ProductController::class, 'uploadImage'])->middleware('api');

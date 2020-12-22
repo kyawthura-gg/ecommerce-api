@@ -140,7 +140,6 @@ class ProductController extends Controller
             'image' => 'required|mimes:png,jpeg,jpg|max:2048',
         ]);
 
-        // $path = $request->file->move(public_path('uploads'), $fileName);
         $path = $request->file('image')->store('uploads/product');
         return response()->json($path, 200);
     }
@@ -192,5 +191,16 @@ class ProductController extends Controller
         $product->save();
 
         return response()->json(['message' => 'Review added'], 201);
+    }
+
+    /**
+     * Get top rated product
+     *
+     * @return JSON
+     */
+    public function topProducts()
+    {
+        $product = Product::orderBy('rating', 'DESC')->take(3)->get();
+        return response()->json($product, 200);
     }
 }

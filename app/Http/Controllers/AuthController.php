@@ -97,6 +97,7 @@ class AuthController extends Controller
     /**
      * Get the authenticated User.
      *
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile($id)
