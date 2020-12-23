@@ -13,6 +13,14 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany('App\Models\ProductReview');
+        return $this->hasMany('App\Models\ProductReview', 'product_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+    public function subCategory()
+    {
+        return $this->belongsTo('App\Models\SubCategory');
     }
 }
