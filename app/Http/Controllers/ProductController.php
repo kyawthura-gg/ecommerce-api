@@ -34,11 +34,11 @@ class ProductController extends Controller
             'pages' => round($count / $pageSize)
         ], 200);
     }
-    public function productById($slug)
+    public function productBySlug($slug)
     {
-        $product  = Product::where('slug', '=', $slug)->firstOrFail();
+        $product  = Product::with('reviews')->where('slug', '=', $slug)->firstOrFail();
 
-        $product->reviews = ProductReview::with('user')->where('product_id', $product->id)->get();
+        // $product->reviews = ProductReview::with('user')->where('product_id', $product->id)->get();
 
         return response()->json($product, 200);
     }
@@ -83,6 +83,7 @@ class ProductController extends Controller
                 'slug' => $slug,
                 'user_id' => Auth::user()->id,
                 'category_id' => 1,
+                'sub_category_id' => 1,
                 'name' => 'Sample name',
                 'description' => 'Sample description',
                 'price' => 0,

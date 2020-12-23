@@ -66,11 +66,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function orders()
     {
-        return $this->hasMany('App\Models\Order');
+        return $this->belongsToMany('App\Models\Order');
     }
 
     public function reviews()
     {
-        return $this->hasMany('App\Models\ProductReview');
+        return $this->belongsToMany('App\Models\ProductReview');
     }
 }

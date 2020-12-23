@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SubCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +48,7 @@ Route::group([
     Route::get('/', [ProductController::class, 'products']);
     Route::post('/', [ProductController::class, 'store'])->middleware('api');
 
-    Route::get('/{slug}', [ProductController::class, 'productById']);
+    Route::get('/{slug}', [ProductController::class, 'productBySlug']);
     Route::delete('/{id}', [ProductController::class, 'destroy'])->middleware('api');
     Route::put('/{id}', [ProductController::class, 'update'])->middleware('api');
 
@@ -69,4 +71,27 @@ Route::group([
 
 Route::middleware('auth:api')->get('/config/paypal', function () {
     return response()->json(env('PAYPAL_CLIENT_ID', 0), 200);
+});
+
+
+Route::get('/categories', [CategoryController::class, 'categories']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'categories'
+], function () {
+    Route::post('/', [CategoryController::class, 'store']);
+    Route::get('/{id}', [CategoryController::class, 'categoryBySlug']);
+    Route::put('/{id}', [CategoryController::class, 'update']);
+    Route::delete('/{id}', [CategoryController::class, 'destroy']);
+});
+
+Route::get('/subCategories', [SubCategoryController::class, 'subCategories']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'subCategories'
+], function () {
+    Route::post('/', [SubCategoryController::class, 'store']);
+    Route::get('/{id}', [SubCategoryController::class, 'subCategoryBySlug']);
+    Route::put('/{id}', [SubCategoryController::class, 'update']);
+    Route::delete('/{id}', [SubCategoryController::class, 'destroy']);
 });
