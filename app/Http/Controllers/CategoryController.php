@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['categories']]);
+        $this->middleware('auth:api', ['except' => ['categories', 'subCategories']]);
     }
 
     /**
@@ -28,6 +28,17 @@ class CategoryController extends Controller
     public function categories()
     {
         $categories = Category::all();
+
+        return response()->json($categories);
+    }
+    /**
+     * get all categoies with sub categories
+     *
+     * @return JSON
+     */
+    public function subCategories()
+    {
+        $categories = Category::with('subCategories')->get();
 
         return response()->json($categories);
     }
