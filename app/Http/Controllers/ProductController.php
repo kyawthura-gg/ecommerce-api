@@ -19,9 +19,7 @@ class ProductController extends Controller
         $page = (int)$request->query('pageNumber', 1);
         $keyword = '%' . $request->query('keyword', '') . '%';
 
-        $count =  DB::table('products')
-            ->where('name', 'like', $keyword)
-            ->count();
+        $count = Product::where('name', 'like', $keyword)->count();
 
         $products = Product::where('name', 'like', $keyword)
             ->offset($pageSize * ($page - 1))
