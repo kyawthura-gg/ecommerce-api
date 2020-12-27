@@ -34,9 +34,8 @@ class ProductController extends Controller
     }
     public function productBySlug($slug)
     {
-        $product  = Product::with('reviews')->where('slug', '=', $slug)->firstOrFail();
-
-        // $product->reviews = ProductReview::with('user')->where('product_id', $product->id)->get();
+        $product  = Product::with('reviews')
+            ->where('slug', '=', $slug)->firstOrFail();
 
         return response()->json($product, 200);
     }
@@ -51,13 +50,10 @@ class ProductController extends Controller
     {
         if (Auth::check() && Auth::user()->is_admin) {
             $product = Product::findOrFail($id);
-            if ($product) {
-                $product->delete();
-                return response()->json(['message' => 'Product deleted'], 200);
-            }
-            return response()->json(['message' => 'Product not found'], 404);
+            $product->delete();
+            return response()->json(['message' => 'Product deleted'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**
@@ -93,7 +89,7 @@ class ProductController extends Controller
             ]);
             return response()->json($product, 201);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**

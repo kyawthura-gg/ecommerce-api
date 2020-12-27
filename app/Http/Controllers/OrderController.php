@@ -91,8 +91,6 @@ class OrderController extends Controller
             $order->user = $user;
             return response()->json($order, 200);
         }
-
-        return response()->json(["message" => 'Order Not Found'], 404);
     }
     /**
      * Update the specified resource in storage.
@@ -114,22 +112,18 @@ class OrderController extends Controller
         }
 
         $order = Order::findOrFail($id);
+        $order->is_paid = true;
+        $order->paid_at = Carbon::now();
+        $order->save();
 
-        if ($order) {
-            $order->is_paid = true;
-            $order->paid_at = Carbon::now();
-            $order->save();
-
-            DB::table('order_payments')->insert(array_merge(
-                $validator->validated(),
-                [
-                    'order_id' => $order->id,
-                    'email_address' => $request->payer['email_address']
-                ]
-            ));
-            return response()->json($order, 200);
-        }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        DB::table('order_payments')->insert(array_merge(
+            $validator->validated(),
+            [
+                'order_id' => $order->id,
+                'email_address' => $request->payer['email_address']
+            ]
+        ));
+        return response()->json($order, 200);
     }
 
     /**
@@ -158,14 +152,11 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        if ($order) {
-            $order->is_delivered = true;
-            $order->delivered_at = Carbon::now();
-            $order->save();
+        $order->is_delivered = true;
+        $order->delivered_at = Carbon::now();
+        $order->save();
 
-            return response()->json($order, 200);
-        }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json($order, 200);
     }
     /**
      * Get all order lists

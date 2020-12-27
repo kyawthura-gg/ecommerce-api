@@ -128,7 +128,7 @@ class CategoryController extends Controller
             $category->update($validator->validated());
             return response()->json($category, 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**
@@ -141,12 +141,10 @@ class CategoryController extends Controller
     {
         if (Auth::check() && Auth::user()->is_admin) {
             $category = Category::findOrFail($id);
-            if ($category) {
-                $category->delete();
-                return response()->json(['message' => 'Category deleted'], 200);
-            }
-            return response()->json(['message' => 'Category not found'], 404);
+
+            $category->delete();
+            return response()->json(['message' => 'Category deleted'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 }
