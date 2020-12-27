@@ -36,8 +36,8 @@ class ProductController extends Controller
     }
     public function productBySlug($slug)
     {
-        $product  = Product::with('reviews')->where('slug', '=', $slug)->firstOrFail();
-
+        $product  = Product::with('reviews')
+            ->where('slug', '=', $slug)->firstOrFail();
 
         return response()->json($product, 200);
     }
@@ -52,11 +52,8 @@ class ProductController extends Controller
     {
         if (Auth::check() && Auth::user()->is_admin) {
             $product = Product::findOrFail($id);
-            if ($product) {
-                $product->delete();
-                return response()->json(['message' => 'Product deleted'], 200);
-            }
-            return response()->json(['message' => 'Product not found'], 404);
+            $product->delete();
+            return response()->json(['message' => 'Product deleted'], 200);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }

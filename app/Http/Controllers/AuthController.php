@@ -182,11 +182,8 @@ class AuthController extends Controller
     {
         if (Auth::check() && Auth::user()->is_admin) {
             $user = User::findOrFail($id);
-            if ($user) {
-                $user->delete();
-                return response()->json(['message' => 'User deleted'], 200);
-            }
-            return response()->json(['message' => 'User not found'], 404);
+            $user->delete();
+            return response()->json(['message' => 'User deleted'], 200);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
@@ -202,14 +199,12 @@ class AuthController extends Controller
         $user = auth()->user();
         if ($user->is_admin) {
             $user = User::findOrFail($id);
-            if ($user) {
-                $user->name = $request->get('name');
-                $user->email = $request->get('email');
-                $user->is_admin = $request->get('is_admin');
-                $user->save();
-                return response()->json($user, 200);
-            }
-            return response()->json(['message' => 'User not found'], 404);
+
+            $user->name = $request->get('name');
+            $user->email = $request->get('email');
+            $user->is_admin = $request->get('is_admin');
+            $user->save();
+            return response()->json($user, 200);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
