@@ -188,7 +188,7 @@ class AuthController extends Controller
             }
             return response()->json(['message' => 'User not found'], 404);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
     /**
      * update user by admin
@@ -211,6 +211,6 @@ class AuthController extends Controller
             }
             return response()->json(['message' => 'User not found'], 404);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 }

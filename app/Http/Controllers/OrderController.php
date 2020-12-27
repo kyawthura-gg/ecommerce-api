@@ -91,8 +91,6 @@ class OrderController extends Controller
             $order->user = $user;
             return response()->json($order, 200);
         }
-
-        return response()->json(["message" => 'Order Not Found'], 404);
     }
     /**
      * Update the specified resource in storage.

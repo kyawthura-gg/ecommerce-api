@@ -70,7 +70,7 @@ class SubCategoryController extends Controller
             ]);
             return response()->json($subCategory, 201);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**
@@ -107,7 +107,7 @@ class SubCategoryController extends Controller
             $subCategory->update($validator->validated());
             return response()->json($subCategory, 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**
@@ -126,6 +126,6 @@ class SubCategoryController extends Controller
             }
             return response()->json(['message' => 'Sub Category not found'], 404);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 }

@@ -115,7 +115,7 @@ class CategoryController extends Controller
             $category->update($validator->validated());
             return response()->json($category, 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 
     /**
@@ -134,6 +134,6 @@ class CategoryController extends Controller
             }
             return response()->json(['message' => 'Category not found'], 404);
         }
-        return response()->json(['message' => 'Something went wrong'], 400);
+        return response()->json(['message' => 'Unauthorize'], 401);
     }
 }
