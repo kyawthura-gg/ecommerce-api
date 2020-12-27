@@ -72,9 +72,13 @@ Route::group([
 Route::middleware('auth:api')->get('/config/paypal', function () {
     return response()->json(env('PAYPAL_CLIENT_ID', 0), 200);
 });
-
-Route::get('/categories/subCategories', [CategoryController::class, 'categoryList']);
-Route::get('/categories', [CategoryController::class, 'categories']);
+Route::group([
+    'prefix' => 'categories'
+], function () {
+    Route::get('/subCategories', [CategoryController::class, 'subCategories']);
+    Route::get('/', [CategoryController::class, 'categories']);
+    Route::get('/products', [CategoryController::class, 'products']);
+});
 Route::group([
     'middleware' => 'api',
     'prefix' => 'categories'

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +19,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['categories', 'subCategories']]);
+        $this->middleware('auth:api', ['except' => ['categories', 'subCategories', 'products']]);
     }
 
     /**
@@ -27,20 +29,31 @@ class CategoryController extends Controller
      */
     public function categories()
     {
-        $categories = Category::all();
-
-        return response()->json($categories);
-    }
-    /**
-     * get all categoies with sub categories
-     *
-     * @return JSON
-     */
-    public function subCategories()
-    {
         $categories = Category::with('subCategories')->get();
 
         return response()->json($categories);
+    }
+    public function products(Request $request)
+    {
+        $pageSize = 10;
+
+        $page = (int)$request->query('pageNumber', 1);
+        $categorySlug = $request->query('category', '');
+
+        $count = Product::where('category_id', $categorySlug)
+            ->orWhere('sub_category_id',  $categorySlug)->count();
+
+        $products = Product::where('category_id', $categorySlug)
+            ->orWhere('sub_category_id',  $categorySlug)
+            ->offset($pageSize * ($page - 1))
+            ->limit($pageSize)
+            ->get();
+
+        return response()->json([
+            'products' => $products,
+            'page' => $page,
+            'pages' => round($count / $pageSize)
+        ], 200);
     }
     /**
      * get  cateogry details by slug
