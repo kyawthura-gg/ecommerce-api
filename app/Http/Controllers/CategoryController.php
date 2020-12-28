@@ -143,7 +143,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
 
             $category->delete();
-            return response()->json(['message' => 'Category deleted'], 200);
+            return response()->json(['message' => 'Category deleted'], 204);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }

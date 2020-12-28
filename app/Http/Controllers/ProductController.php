@@ -51,7 +51,7 @@ class ProductController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             $product = Product::findOrFail($id);
             $product->delete();
-            return response()->json(['message' => 'Product deleted'], 200);
+            return response()->json(['message' => 'Product deleted'], 204);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
