@@ -33,6 +33,12 @@ class CategoryController extends Controller
 
         return response()->json($categories);
     }
+    /**
+     * Get proudcts by page size 10 and keywords
+     *
+     * @param Request $request
+     * @return collection
+     */
     public function products(Request $request)
     {
         $pageSize = 10;

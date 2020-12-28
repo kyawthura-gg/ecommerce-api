@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    /**
+     * Get product by page size and keywords
+     *
+     * @param Request $request
+     * @return collection
+     */
     public function products(Request $request)
     {
         $pageSize = 10;

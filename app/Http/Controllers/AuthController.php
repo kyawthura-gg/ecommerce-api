@@ -24,7 +24,7 @@ class AuthController extends Controller
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return object
      */
     public function login(Request $request)
     {
@@ -47,7 +47,8 @@ class AuthController extends Controller
     /**
      * Register a User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return object
      */
     public function register(Request $request)
     {
