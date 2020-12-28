@@ -24,7 +24,7 @@ class AuthController extends Controller
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return object
      */
     public function login(Request $request)
     {
@@ -47,7 +47,8 @@ class AuthController extends Controller
     /**
      * Register a User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return object
      */
     public function register(Request $request)
     {
@@ -81,7 +82,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out']);
+        return response()->json(['message' => 'User successfully signed out'],204);
     }
 
     /**
@@ -183,7 +184,7 @@ class AuthController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             $user = User::findOrFail($id);
             $user->delete();
-            return response()->json(['message' => 'User deleted'], 200);
+            return response()->json(['message' => 'User deleted'], 204);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }

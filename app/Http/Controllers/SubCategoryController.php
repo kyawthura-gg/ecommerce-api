@@ -23,7 +23,7 @@ class SubCategoryController extends Controller
     /**
      * get all sub category with category
      *
-     * @return JSON
+     * @return collection
      */
     public function subCategories()
     {
@@ -36,7 +36,7 @@ class SubCategoryController extends Controller
      * get Sub cateogry details by slug
      *
      * @param string $slug
-     * @return JSON
+     * @return object
      */
     public function subCategoryBySlug($slug)
     {
@@ -48,7 +48,7 @@ class SubCategoryController extends Controller
      * Create new sub category
      *
      * @param object {} //client send empty object
-     * @return JSON
+     * @return Object
      */
     public function store()
     {
@@ -78,7 +78,7 @@ class SubCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Object
      */
     public function update(Request $request, $id)
     {
@@ -121,7 +121,7 @@ class SubCategoryController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             $subCategory = SubCategory::findOrFail($id);
             $subCategory->delete();
-            return response()->json(['message' => 'Sub Category deleted'], 200);
+            return response()->json(['message' => 'Sub Category deleted'], 204);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }

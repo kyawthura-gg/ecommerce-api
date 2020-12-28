@@ -33,6 +33,12 @@ class CategoryController extends Controller
 
         return response()->json($categories);
     }
+    /**
+     * Get proudcts by page size 10 and keywords
+     *
+     * @param Request $request
+     * @return collection
+     */
     public function products(Request $request)
     {
         $pageSize = 10;
@@ -143,7 +149,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
 
             $category->delete();
-            return response()->json(['message' => 'Category deleted'], 200);
+            return response()->json(['message' => 'Category deleted'], 204);
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
