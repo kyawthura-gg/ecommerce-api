@@ -82,7 +82,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out'],204);
+        return response()->noContent();
     }
 
     /**
