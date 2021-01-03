@@ -141,7 +141,7 @@ class ProductController extends Controller
 
         if ($product && Auth::user()->is_admin) {
 
-            $product->update($validator->validated());
+            $product->update(array_merge(["count_stock" => $request->count_stock], $validator->validated()));
             return response()->json($product, 200);
         }
         return response()->json(['message' => 'Something went wrong'], 400);
@@ -161,7 +161,7 @@ class ProductController extends Controller
         $image = $request->file('image');
         $path = $image->store($uploadFolder, 'public');
         //    Storage::disk('public')->url($image_uploaded_path),
-        return response()->json($path, 200);
+        return response()->json('/' . $path, 200);
     }
 
     /**
