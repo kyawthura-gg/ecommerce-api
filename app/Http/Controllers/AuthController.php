@@ -59,7 +59,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json(['message' => $validator->messages()->first()], 400);
         }
 
         $user = User::create(array_merge(
@@ -82,7 +82,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out'],204);
+        return response()->noContent();
     }
 
     /**

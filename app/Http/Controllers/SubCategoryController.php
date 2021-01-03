@@ -121,7 +121,7 @@ class SubCategoryController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             $subCategory = SubCategory::findOrFail($id);
             $subCategory->delete();
-            return response()->json(['message' => 'Sub Category deleted'], 204);
+            return response()->noContent();
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }

@@ -20,17 +20,32 @@ class ProductController extends Controller
      */
     public function products(Request $request)
     {
+        // for refactor
+        // $keyword = '%' . $request->query('keyword', '') . '%';
+        // $data = Product::where('name', 'like', $keyword)->paginate();
         $pageSize = 10;
 
         $page = (int)$request->query('pageNumber', 1);
         $keyword = '%' . $request->query('keyword', '') . '%';
-
-        $count = Product::where('name', 'like', $keyword)->count();
+        $isVisible = [true];
+        if (Auth::check() && Auth::user()->is_admin) {
+            $isVisible = [true, false];
+        }
+        $count = Product::where('name', 'like', $keyword)
+            ->whereIn('is_visible', $isVisible)
+            ->count();
 
         $products = Product::where('name', 'like', $keyword)
+            ->whereIn('is_visible', $isVisible)
             ->offset($pageSize * ($page - 1))
             ->limit($pageSize)
             ->get();
+
+        return response()->json([
+            'products' => $products,
+            'page' => $page,
+            'pages' => round($count / $pageSize)
+        ], 200);
 
         return response()->json([
             'products' => $products,
@@ -57,7 +72,7 @@ class ProductController extends Controller
         if (Auth::check() && Auth::user()->is_admin) {
             $product = Product::findOrFail($id);
             $product->delete();
-            return response()->json(['message' => 'Product deleted'], 204);
+            return response()->noContent();
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
@@ -114,6 +129,8 @@ class ProductController extends Controller
             'price' => 'required',
             'image' => 'required',
             'brand' => 'required',
+            'is_visible' => 'required',
+            'sub_category_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -124,7 +141,7 @@ class ProductController extends Controller
 
         if ($product && Auth::user()->is_admin) {
 
-            $product->update($validator->validated());
+            $product->update(array_merge(["count_stock" => $request->count_stock], $validator->validated()));
             return response()->json($product, 200);
         }
         return response()->json(['message' => 'Something went wrong'], 400);
@@ -138,11 +155,13 @@ class ProductController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
         ]);
-
-        $path = $request->file('image')->store('uploads/product');
-        return response()->json($path, 200);
+        $uploadFolder = 'products';
+        $image = $request->file('image');
+        $path = $image->store($uploadFolder, 'public');
+        //    Storage::disk('public')->url($image_uploaded_path),
+        return response()->json('/' . $path, 200);
     }
 
     /**

@@ -42,15 +42,26 @@ class CategoryController extends Controller
     public function products(Request $request)
     {
         $pageSize = 10;
+        $tableName = '';
+        $value = 0;
 
         $page = (int)$request->query('pageNumber', 1);
         $categorySlug = $request->query('category', '');
 
-        $count = Product::where('category_id', $categorySlug)
-            ->orWhere('sub_category_id',  $categorySlug)->count();
+        $category = Category::where('slug', $categorySlug)->first();
+        $subCategory = SubCategory::where('slug', $categorySlug)->first();
+        if (!empty($category)) {
+            // to check in below query
+            $tableName = "category_id";
+            $value = $category->id;
+        } else {
+            $tableName = "sub_category_id";
+            $value = $subCategory->id;
+        }
 
-        $products = Product::where('category_id', $categorySlug)
-            ->orWhere('sub_category_id',  $categorySlug)
+        $count = Product::where($tableName, $value)->count();
+
+        $products = Product::where($tableName, $value)
             ->offset($pageSize * ($page - 1))
             ->limit($pageSize)
             ->get();
@@ -149,7 +160,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
 
             $category->delete();
-            return response()->json(['message' => 'Category deleted'], 204);
+            return response()->noContent();
         }
         return response()->json(['message' => 'Unauthorize'], 401);
     }
